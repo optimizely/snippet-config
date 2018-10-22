@@ -7,7 +7,7 @@ This application illustrates the use of Optimizely X Full Stack to configure the
 Here's a description of the important files in this repository:
 
         snippet-config/application.py  # python webapp which uses Full Stack to render
-                                       # the Web snippet in the HTML response
+                                       # the Optimizely Web snippet in the HTML response
 
         snippet-config/optimizely_config_manager.py     # A simple container class for the
                                                         # Optimizely instance used by application.py
