@@ -1,5 +1,4 @@
 .DS_Store
-my_virtual_env/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
