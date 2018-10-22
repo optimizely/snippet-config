@@ -10,11 +10,11 @@ from operator import itemgetter
 from optimizely_config_manager import OptimizelyConfigManager
 from flask import Flask, render_template, request
 
-PORT = 4001
+##
+# Globals
+##
 
-##
-# Optimizely element masking
-##
+PORT = 4001
 
 # Optimizely Full Stack SDK Key (use None in order to read from local filesystem)
 SNIPPET_CONFIG_FULL_STACK_SDK_KEY = None 
@@ -22,10 +22,16 @@ SNIPPET_CONFIG_FULL_STACK_SDK_KEY = None
 # For simplicity, we use a blank user_id value
 USER_ID = ''
 
+
+##
 # Initialization
+##
+
 config_manager = OptimizelyConfigManager(SNIPPET_CONFIG_FULL_STACK_SDK_KEY)
 application = Flask(__name__, static_folder='images')
 application.secret_key = os.urandom(24)
+
+
 
 ##
 # Request Handlers
@@ -52,6 +58,7 @@ def refresh_datafile():
   """Request handler for '/refresh'; used to manually trigger a datafile refresh."""
   datafile = config_manager.set_instance()
   return datafile, 200, {'ContentType':'application/json'} 
+
 
 ##
 # Main

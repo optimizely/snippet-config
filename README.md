@@ -2,6 +2,30 @@
 
 This application illustrates the use of Optimizely X Full Stack to configure the Optimizely X Web snippet on a simple web page.
 
+## Repository structure
+
+Here's a description of the important files in this repository:
+
+        snippet-config/application.py  # python webapp which uses Full Stack to render
+                                       # the Web snippet in the HTML response
+
+        snippet-config/optimizely_config_manager.py     # A simple container class for the
+                                                        # Optimizely instance used by application.py
+
+        snippet-config/datafile.json    # A local copy of the Full Stack project datafile
+                                        # application.py is configured to read from this file
+                                        # rather than directly from cdn.optimizely.com
+
+        snippet-config/update_datafile.sh   # A shell script that updates /datafile.json with
+                                            # the contents of the appropriate datafile on
+                                            # cdn.optimizely.com
+
+        snippet-config/templates/index.html     # a flask template for a simple web page, rendered by
+                                                # application.py
+
+        snippet-config/templates/optimizely_web_snippet.html    # a flask template for the Optimizely
+                                                                # Web snippet
+
 ## Deploying the application
 
 1. Create and run a [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
