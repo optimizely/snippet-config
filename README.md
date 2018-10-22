@@ -1,18 +1,6 @@
-# Flicker Management Example App
+# Snippet configuration example app
 
-This application illustrates a simple flicker management mechanism for asynchronous installs of Optimizely X Web.  The mechanism works by masking certain elements until all syncronous Optimizely variation code has been executed, preventing the "flicker" of original content as the page is loading.
-
-* The application uses Cooper Reid's [client-side masking code](https://github.com/optimizely/addons-library/tree/master/nonblocking-snippet) to hide certain DOM elements until Web experiment changes are applied.
-* The app loads an [X Web client](https://cdn.optimizely.com/js/11085868647.js) with a one-variation experiment that modifies the contents of "Element 1" and "Element 2".
-* The X Web client's loading delay is deliberatly exaggerated in order to illustrate the impact of masking the modified element.
-* A [Mask Configuration Full Stack project](https://cdn.optimizely.com/json/11105544875.json) is used to dynamically configure which elements on the site are masked. 
-* The same Full Stack project may be used to load the snippet synchronously instead of asynchronously, which will also eliminate flicker at the cost of increased page latency. 
-
-## Architecture
-
-![](images/architecture.png)
-
-See [this presentation](https://docs.google.com/presentation/d/1s8VX9djBmsy3AwZpcRJuj33LCOXIJdk7XWE20aZbtug/edit#slide=id.g3e66b76d14_0_0) for more detail.
+This application illustrates the use of Optimizely X Full Stack to configure the Optimizely X Web snippet on a simple web page.
 
 ## Deploying the application
 
@@ -29,37 +17,26 @@ in a web browser.  To view the page without masking enabled, load
 
       http://localhost:4001/?disablemask
 
-## How it works
+## Updating the local Full Stack datafile
 
-There is nothing special about the X Web experiment running in this appliction.  It executes a small custom JavaScript change to the two colored elements on the page.
+`application.py` is configured to load the Full Stack datafile from `./datafile.json`. To refresh the contents of this file, run
 
-The python appserver renders the contents of `mask.js` into the head of the `index.html` template.  `mask.js`defines a function, `hideElements()`, which is called on a list of css selectors.  We use [Features](https://help.optimizely.com/Set_Up_Optimizely/Develop_a_product_or_feature_with_Feature_Management) in a "mask configuration" [Full Stack project](https://cdn.optimizely.com/json/11105544875.json) to populate this list.  To mask an additional element, the user need only 
+      ./update_datafile.sh <YOUR SDK KEY>
 
-1. create a new Feature in this project, e.g. `example_mask`
-2. add a String `css_selector` variable to the `example_mask` feature config
-3. set the default value of this variable to the appropriate css selector, e.g. `#exampleElement`
+Using the [SDK Key](https://help.optimizely.com/Set_Up_Optimizely/Access_the_datafile_for_a_Full_Stack_project) for your Full Stack project. For example:
 
-`mask.js` will mask all elements corresponding to the `css_selector` variable values for all active features. The user can use the appropriate [Feature Toggle](https://help.optimizely.com/Set_Up_Optimizely/Develop_a_product_or_feature_with_Feature_Management) to enable or disable masking for any element.  The user could even target element masking to a specific audience!
+      ./update_datafile.sh FTTcU3Li4Ru1DA3LnvSMns
 
-## The Mask Configuration Full Stack Project
 
-Here's a rough schema for the features defined in the "mask configuration" [Full Stack project](https://cdn.optimizely.com/json/11105544875.json):
+## The Snippet Configuration Full Stack Project
 
-      global_config
-        is_snippet_synchronous: True
-        mask_timout: 2000
+Here's a rough schema for the "Snippet Configuration" Full Stack project this application depends on:
 
-      element1_mask
-        css_selector: "#element1"
+      Full Stack "Snippet Configuration" Project
+        Feature: snippet_config
+          Variable: is_snippet_in_head (default value: True)
+          Variable: snippet_url (default value: "https://cdn.optimizely.com/js/11903751716.js")
+          Variable: is_snippet_synchronous (default value: True)
 
-      element2_mask
-        css_selector: "div.carousel"
-
-      etc.
-
-![](images/features.png)
-
-![](images/mask_feature.png)
-
-![](images/global_config.png)
+![](images/snippet_config.png)
 
