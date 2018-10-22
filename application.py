@@ -42,7 +42,6 @@ application.secret_key = os.urandom(24)
 def index():
   """Request handler for '/'; renders templates/index.html."""
   optimizely_client = config_manager.get_instance()
-  datafile_contents = open("datafile.json").read()
   return render_template('index.html',
     is_snippet_enabled=optimizely_client.is_feature_enabled('snippet_config', 
                                                             USER_ID),
@@ -51,7 +50,8 @@ def index():
                                                                           USER_ID),
     snippet_url=optimizely_client.get_feature_variable_string('snippet_config', 
                                                               'snippet_url', 
-                                                              USER_ID), datafile=datafile_contents)
+                                                              USER_ID), 
+    datafile=config_manager.get_datafile())
  
 # render homepage
 @application.route('/refresh')
