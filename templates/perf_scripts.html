@@ -1,4 +1,5 @@
 <script async="true">
+
 //TTI Polyfill Code source: https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics#tracking_tti
 (function(){var h="undefined"!=typeof window&&window===this?this:"undefined"!=typeof global&&null!=global?global:this,k="function"==typeof Object.defineProperties?Object.defineProperty:function(a,b,c){a!=Array.prototype&&a!=Object.prototype&&(a[b]=c.value)};function l(){l=function(){};h.Symbol||(h.Symbol=m)}var n=0;function m(a){return"jscomp_symbol_"+(a||"")+n++}
 function p(){l();var a=h.Symbol.iterator;a||(a=h.Symbol.iterator=h.Symbol("iterator"));"function"!=typeof Array.prototype[a]&&k(Array.prototype,a,{configurable:!0,writable:!0,value:function(){return q(this)}});p=function(){}}function q(a){var b=0;return r(function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}})}function r(a){p();a={next:a};a[h.Symbol.iterator]=function(){return this};return a}function t(a){p();var b=a[Symbol.iterator];return b?b.call(a):q(a)}
@@ -17,7 +18,7 @@ C.prototype.B=function(){G(this,performance.now()+5E3)};h.Object.definePropertie
 
 "use strict";
 
-//create Optimizely client
+// instantiate the Optimizely JS SDK on the client side, and send an event with a time-to-interactive measurement attached
 var script = document.createElement('script');
 script.onload = function () {
     var optlyClient = optimizelySdk.createInstance({ datafile: {{ datafile | safe }} });
