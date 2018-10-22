@@ -16,51 +16,16 @@ PORT = 4001
 # Optimizely element masking
 ##
 
-# Optimizely Project IDs
-FULL_STACK_PROJECT_ID = '11105544875'
-WEB_PROJECT_ID = '11085868647'
+# Optimizely Full Stack SDK Key (use None in order to read from local filesystem)
+SNIPPET_CONFIG_FULL_STACK_SDK_KEY = None 
 
-# Full Stack feature/variable keys
-GLOBAL_CONFIG = 'global_config'
-MASK_TIMEOUT = 'mask_timeout'
-MASK_TIMEOUT_TYPE = 'integer'
-IS_SNIPPET_SYNCHRONOUS = 'is_snippet_synchronous'
-IS_SNIPPET_SYNCHRONOUS_TYPE = 'boolean'
-CSS_SELECTOR = 'css_selector'
-CSS_SELECTOR_TYPE = 'string'
-
-
-# None of the masking logic is user-specific in this example, so we keep the user_id constant
+# For simplicity, we use a blank user_id value
 USER_ID = ''
 
 # Initialization
-config_manager = OptimizelyConfigManager(FULL_STACK_PROJECT_ID)
+optimizely = OptimizelyConfigManager(SNIPPET_CONFIG_FULL_STACK_SDK_KEY).get_instance()
 application = Flask(__name__, static_folder='images')
 application.secret_key = os.urandom(24)
-
-def get_mask_timeout():
-  """Retrieve the mask timeout value from the global config feature."""
-  timeout = config_manager.get_variable(GLOBAL_CONFIG, MASK_TIMEOUT, USER_ID, MASK_TIMEOUT_TYPE)
-  if timeout is None:
-    timeout = 0
-  return timeout
-
-def get_is_snippet_synchronous():
-  return config_manager.get_variable(GLOBAL_CONFIG, 
-                                     IS_SNIPPET_SYNCHRONOUS, 
-                                     USER_ID, 
-                                     IS_SNIPPET_SYNCHRONOUS_TYPE)
-
-def get_masked_elements():
-  """Retrieve the list of masked element css selectors from the active Full Stack Features."""
-  features = config_manager.get_enabled_features(USER_ID)
-  masked_elements = []
-  for feature in features:
-    if feature != GLOBAL_CONFIG:
-      css_selector = config_manager.get_variable(feature, CSS_SELECTOR, USER_ID, CSS_SELECTOR_TYPE)
-      if css_selector:
-        masked_elements.append(css_selector)
-  return masked_elements
 
 ##
 # Request Handlers
@@ -70,12 +35,11 @@ def get_masked_elements():
 @application.route('/')
 def index():
   """Request handler for '/'; renders templates/index.html."""
-  return render_template('index.html', 
-                         is_snippet_synchronous=get_is_snippet_synchronous(),
-                         masked_elements=get_masked_elements(),
-                         web_project_id=WEB_PROJECT_ID,
-                         mask_timeout = get_mask_timeout())
-
+  return render_template('index.html',
+    is_snippet_active=optimizely.is_feature_enabled('snippet_config', USER_ID),
+    is_snippet_synchronous=optimizely.get_feature_variable_boolean('snippet_config', 'is_snippet_synchronous', USER_ID),
+    snippet_url=optimizely.get_feature_variable_string('snippet_config', 'snippet_url', USER_ID))
+ 
 # render homepage
 @application.route('/refresh')
 def refresh_datafile():
