@@ -23,7 +23,7 @@ SNIPPET_CONFIG_FULL_STACK_SDK_KEY = None
 USER_ID = ''
 
 # Initialization
-optimizely = OptimizelyConfigManager(SNIPPET_CONFIG_FULL_STACK_SDK_KEY).get_instance()
+config_manager = OptimizelyConfigManager(SNIPPET_CONFIG_FULL_STACK_SDK_KEY)
 application = Flask(__name__, static_folder='images')
 application.secret_key = os.urandom(24)
 
@@ -35,16 +35,22 @@ application.secret_key = os.urandom(24)
 @application.route('/')
 def index():
   """Request handler for '/'; renders templates/index.html."""
+  optimizely_client = config_manager.get_instance()
   return render_template('index.html',
-    is_snippet_active=optimizely.is_feature_enabled('snippet_config', USER_ID),
-    is_snippet_synchronous=optimizely.get_feature_variable_boolean('snippet_config', 'is_snippet_synchronous', USER_ID),
-    snippet_url=optimizely.get_feature_variable_string('snippet_config', 'snippet_url', USER_ID))
+    is_snippet_enabled=optimizely_client.is_feature_enabled('snippet_config', 
+                                                            USER_ID),
+    is_snippet_synchronous=optimizely_client.get_feature_variable_boolean('snippet_config', 
+                                                                          'is_snippet_synchronous', 
+                                                                          USER_ID),
+    snippet_url=optimizely_client.get_feature_variable_string('snippet_config', 
+                                                              'snippet_url', 
+                                                              USER_ID))
  
 # render homepage
 @application.route('/refresh')
 def refresh_datafile():
   """Request handler for '/refresh'; used to manually trigger a datafile refresh."""
-  datafile = config_manager.set_obj()
+  datafile = config_manager.set_instance()
   return datafile, 200, {'ContentType':'application/json'} 
 
 ##

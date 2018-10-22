@@ -34,7 +34,6 @@ Here's a rough schema for the "Snippet Configuration" Full Stack project this ap
 
       Full Stack "Snippet Configuration" Project
         Feature: snippet_config
-          Variable: is_snippet_in_head (default value: True)
           Variable: snippet_url (default value: "https://cdn.optimizely.com/js/11903751716.js")
           Variable: is_snippet_synchronous (default value: True)
 

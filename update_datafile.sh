@@ -9,4 +9,5 @@ fi
 DATAFILE_URL="https://cdn.optimizely.com/datafiles/$1.json"
 DESTINATION_FILE="datafile.json"
 
+echo "Fetching datafile from $DATAFILE_URL"
 curl $DATAFILE_URL > $DESTINATION_FILE
