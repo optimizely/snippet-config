@@ -96,7 +96,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-tti-polyfill/
+tti-tracking/
 
 # Spyder project settings
 .spyderproject
