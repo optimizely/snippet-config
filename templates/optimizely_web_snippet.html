@@ -1,0 +1,65 @@
+{% if is_snippet_synchronous %}
+  <!-- Load the Optimizely Web client synchronously. -->
+  <script src="https://cdn.optimizely.com/js/{{ web_project_id }}.js"></script>
+{% else %}
+  <!-- This is the recommended way to load the Optimizely Web client asynchronously. -->
+  <!--
+  <script src="https://cdn.optimizely.com/js/{{ web_project_id }}.js" async="true" defer="true"></script>
+  -->
+
+  <!-- Dynamically loading clientjs in order to exaggerate flicker. -->
+  <!-- This is included for demonstration purposes only -->
+  <script>
+    var script = document.createElement('script');
+    script.src = 'https://cdn.optimizely.com/js/{{ web_project_id }}.js';
+    setTimeout(function() { document.head.appendChild(script); }, 1000 );
+  </script>
+
+  {% if masked_elements %}
+  <style id="optimizely_mask">
+  {{','.join(masked_elements)}} {
+    opacity: 0;
+  }
+  </style>
+
+  <!-- When the snippet is loaded asynchronously, mask the appropriate elements on the page. -->
+  <script type="text/javascript">    
+  var qsParamKeys          = window.location.search.replace(/^\?/, '').split(/\&/).map(function(qs) { 
+                              return qs.split(/\=/)[0]; 
+                             }),
+      disableQS            = qsParamKeys.indexOf('disablemask') > -1,
+      withinOptlyVE        = window.self !== window.top,
+      /**
+      * Disable masking when
+      * (a) in visual editor or (b) query string param disablemask is present in URL
+      */
+      disableMask          = disableQS || withinOptlyVE,
+      maskTimeout          = {{ mask_timeout }};
+
+  var removeMask = function() {
+    try {
+      document.querySelector('#optimizely_mask').disabled = true;
+    } catch(err) { }
+  }
+  /**
+  * Listen for Optimizely snippet activation
+  * and unmask nodes
+  */
+  window.optimizely = window.optimizely || [];
+  window.optimizely.push({
+    type: "addListener",
+    filter: {
+      type: "lifecycle",
+      name: "activated"
+    },
+    "handler": function() {
+      setTimeout(removeMask, 0);
+    }
+  }); 
+  setTimeout(removeMask, maskTimeout);
+  if(disableMask) removeMask();  
+  </script>
+  {% endif %}
+
+{% endif %}
+
