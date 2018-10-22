@@ -20,10 +20,11 @@ C.prototype.B=function(){G(this,performance.now()+5E3)};h.Object.definePropertie
 var script = document.createElement('script');
 script.onload = function () {
     var optlyClient = optimizelySdk.createInstance({ datafile: {{ datafile | safe }} });
+    var userId = "{{ user_id }}";
     optlyClient.logger.logLevelName = "DEBUG";
     ttiPolyfill.getFirstConsistentlyInteractive().then((tti) => {
         var timeToInteractive = parseInt(tti);
-        optlyClient.track("time_to_interactive", "123123", {}, {value: timeToInteractive});
+        optlyClient.track("time_to_interactive", userId, {}, {value: timeToInteractive});
     });
 };
 script.src = "https://unpkg.com/@optimizely/optimizely-sdk@2.1.3/dist/optimizely.browser.umd.min.js";
