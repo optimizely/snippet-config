@@ -9,24 +9,18 @@ This application illustrates the use of Optimizely X Full Stack to configure the
 3. Run the application `python application.py` (be sure the virtualenv is running)
 4. You’re all set. To try this with your own Optimizely projects, modify `FULL_STACK_PROJECT_ID` and `WEB_PROJECT_ID` in `application.py`.
 
-To see the masking in action, load
+Once you're up and running, you can load the page via
 
       http://localhost:4001/
 
-in a web browser.  To view the page without masking enabled, load
-
-      http://localhost:4001/?disablemask
-
 ## Updating the local Full Stack datafile
 
-`application.py` is configured to load the Full Stack datafile from `./datafile.json`. To refresh the contents of this file, run
+`application.py` is configured to load the Full Stack datafile from `./datafile.json`. To refresh the contents of this file and update your running app, complete the following:
 
-      ./update_datafile.sh <YOUR SDK KEY>
+1. run `./update_datafile.sh <YOUR SDK KEY>` using your [SDK Key](https://help.optimizely.com/Set_Up_Optimizely/Access_the_datafile_for_a_Full_Stack_project)
+2. load `http://localhost:4001/refresh` in your browser.
 
-Using the [SDK Key](https://help.optimizely.com/Set_Up_Optimizely/Access_the_datafile_for_a_Full_Stack_project) for your Full Stack project. For example:
-
-      ./update_datafile.sh FTTcU3Li4Ru1DA3LnvSMns
-
+After making changes in your Full Stack project, you may need to wait a minute for your changes to propagate to Optimizely's CDN.  To ensure that your changes are correctly loaded, double-check that the revision number shown on `http://localhost:4001/refresh` matches the revision number shown in your Full Stack project settings.
 
 ## The Snippet Configuration Full Stack Project
 
