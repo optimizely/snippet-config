@@ -1,0 +1,17 @@
+<script type="text/javascript">
+	
+	window.dataLayer = window.dataLayer || {};
+	dataLayer.optimizelyEnabledFeatures = {{ enabled_features|tojson|safe }};
+
+	// Pass active features to New Relic
+	if (typeof newrelic == 'object') {
+  		newrelic.setCustomAttribute('optimizely_segments', dataLayer.optimizelyEnabledFeatures.join(','));
+	}
+
+
+	// Pass active features to Adobe listvar
+	s = s || {};
+	s.list1 = dataLayer.optimizelyEnabledFeatures;
+    
+
+</script>

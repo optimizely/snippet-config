@@ -43,6 +43,7 @@ def index():
   """Request handler for '/'; renders templates/index.html."""
   optimizely_client = config_manager.get_instance()
   return render_template('index.html',
+    enabled_features=optimizely_client.get_enabled_features(USER_ID),
     is_snippet_enabled=optimizely_client.is_feature_enabled('snippet_config', 
                                                             USER_ID),
     is_snippet_synchronous=optimizely_client.get_feature_variable_boolean('snippet_config', 
