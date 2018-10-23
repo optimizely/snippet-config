@@ -1,0 +1,7 @@
+<!-- Code source: https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics#tracking_tti-->
+<script>
+!function(){if('PerformanceLongTaskTiming' in window){var g=window.__tti={e:[]};
+g.o=new PerformanceObserver(function(l){g.e=g.e.concat(l.getEntries())});
+g.o.observe({entryTypes:['longtask']})}}();
+</script>
+

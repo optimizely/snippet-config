@@ -12,3 +12,4 @@ DESTINATION_FILE="datafile.json"
 
 echo "Fetching datafile from $DATAFILE_URL"
 curl $DATAFILE_URL > $DESTINATION_FILE
+curl http://localhost:4001/refresh

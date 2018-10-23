@@ -19,10 +19,6 @@ PORT = 4001
 # Optimizely Full Stack SDK Key (use None in order to read from local filesystem)
 SNIPPET_CONFIG_FULL_STACK_SDK_KEY = None 
 
-# For simplicity, we use a blank user_id value
-USER_ID = ''
-
-
 ##
 # Initialization
 ##
@@ -30,6 +26,10 @@ USER_ID = ''
 config_manager = OptimizelyConfigManager(SNIPPET_CONFIG_FULL_STACK_SDK_KEY)
 application = Flask(__name__, static_folder='images')
 application.secret_key = os.urandom(24)
+
+def get_user_id():
+  """Dummy function that returns a (constant) user ID"""
+  return "user123"
 
 
 
@@ -44,13 +44,15 @@ def index():
   optimizely_client = config_manager.get_instance()
   return render_template('index.html',
     is_snippet_enabled=optimizely_client.is_feature_enabled('snippet_config', 
-                                                            USER_ID),
+                                                            get_user_id()),
     is_snippet_synchronous=optimizely_client.get_feature_variable_boolean('snippet_config', 
                                                                           'is_snippet_synchronous', 
-                                                                          USER_ID),
+                                                                          get_user_id()),
     snippet_url=optimizely_client.get_feature_variable_string('snippet_config', 
                                                               'snippet_url', 
-                                                              USER_ID))
+                                                              get_user_id()), 
+    datafile=config_manager.get_datafile(),
+    user_id=get_user_id())
  
 # render homepage
 @application.route('/refresh')
