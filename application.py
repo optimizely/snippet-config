@@ -29,7 +29,7 @@ application.secret_key = os.urandom(24)
 
 def get_user_id():
   """Dummy function that returns a (constant) user ID"""
-  return "user123"
+  return "user123456"
 
 
 
