@@ -45,7 +45,7 @@ Once you're up and running, you can load the page via
 
 ## Updating the local Full Stack datafile
 
-`application.py` is configured to load the Full Stack datafile from `./datafile.json`. To refresh the contents of this file and update your running app, run:
+To simplify the implementation, `application.py` is configured to load the Full Stack datafile from `./datafile.json` in the local filesystem rather than downloading directly from `cdn.optimizely.com`. To refresh the contents of this file and update your running app, run:
 
         ./update_datafile.sh <YOUR SDK KEY>
 
